@@ -48,7 +48,27 @@ FROM accounts;
 DESC accounts;
 ---
 UPDATE accounts
-SET name = null
+SET name = "Zuhaha"
 WHERE id = "aziz";
 ---
 COMMIT;
+--- ISOLATION
+START TRANSACTION;
+----
+SELECT *
+FROM accounts
+WHERE id IN ('aziz', 'betta') FOR
+UPDATE;
+---
+UPDATE accounts
+SET balance = balance - 50000
+WHERE id = 'aziz';
+---
+UPDATE accounts
+SET balance = balance + 50000
+WHERE id = 'betta';
+
+COMMIT;
+
+
+SELECT * FROM accounts;
