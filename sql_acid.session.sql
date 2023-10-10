@@ -1,4 +1,4 @@
---- ATOMICITY SUCCESS
+--- ATOMICITY
 ---
 DROP TABLE accounts;
 ---
@@ -7,7 +7,7 @@ CREATE TABLE accounts(
     name VARCHAR(100) NOT NULL,
     balance BIGINT NOT NULL,
     PRIMARY KEY (id)
-);
+) Engine = InnoDb;
 --- 
 DESC accounts;
 --- 
@@ -29,7 +29,8 @@ COMMIT;
 --- ATOMICITY FAILED
 START TRANSACTION;
 ---
-SELECT * FROM accounts;
+SELECT *
+FROM accounts;
 ---
 DELETE FROM accounts
 WHERE id = 'aziz';
@@ -38,3 +39,16 @@ DELETE FROM accounts
 WHERE id = 'betta';
 ---
 ROLLBACK;
+--- CONSISTENCY
+START TRANSACTION;
+---
+SELECT *
+FROM accounts;
+---
+DESC accounts;
+---
+UPDATE accounts
+SET name = null
+WHERE id = "aziz";
+---
+COMMIT;
